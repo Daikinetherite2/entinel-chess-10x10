@@ -1,7 +1,7 @@
 {
   "name": "sentinel-chess-pro",
-  "version": "2.1.0",
-  "description": "Game Catur 10x10 Cyberpunk Multiplayer dengan Quick Match & Manual Room List",
+  "version": "2.2.0",
+  "description": "Game Catur 10x10 Cyberpunk dengan Timer & Captured Pieces",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
