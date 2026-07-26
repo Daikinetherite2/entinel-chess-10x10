@@ -23,6 +23,13 @@ let lastMove = null;
 let kingInCheck = null;
 let selectedRoomToJoin = '';
 
+// Variabel Timer & Captured Pieces
+let myTime = 300; // 5 Menit dalam detik
+let oppTime = 300;
+let timerInterval = null;
+let capturedByMe = [];
+let capturedByOpp = [];
+
 const PIECES = {
     'r': '♜', 'n': '♞', 's': '♆', 'b': '♝', 'q': '♛', 'k': '♚', 'p': '♟',
     'R': '♖', 'N': '♘', 'S': '♆', 'B': '♗', 'Q': '♕', 'K': '♔', 'P': '♙'
@@ -126,6 +133,11 @@ socket.on('roomJoined', (data) => {
 socket.on('startGame', (players) => {
     boardState = JSON.parse(JSON.stringify(INITIAL_BOARD));
     myTurn = myColor === 'white';
+    myTime = 300;
+    oppTime = 300;
+    capturedByMe = [];
+    capturedByOpp = [];
+    updateCapturedUI();
     
     document.getElementById('my-name').textContent = myColor === 'white' ? players.white : players.black;
     document.getElementById('opp-name').textContent = myColor === 'white' ? players.black : players.white;
@@ -134,6 +146,7 @@ socket.on('startGame', (players) => {
     
     updateTurnUI();
     renderBoard();
+    startTimer();
 
     glitchOverlay.classList.remove('hidden');
     setTimeout(() => {
@@ -144,7 +157,11 @@ socket.on('startGame', (players) => {
 
 socket.on('errorMsg', (msg) => { errorMsg.textContent = msg; });
 
-socket.on('opponentMove', ({ from, to, promotedPiece, isCapture }) => {
+socket.on('opponentMove', ({ from, to, promotedPiece, isCapture, capturedPiece }) => {
+    if (capturedPiece) {
+        capturedByOpp.push(capturedPiece);
+        updateCapturedUI();
+    }
     executeMoveOnBoard(boardState, from.r, from.c, to.r, to.c, promotedPiece);
     lastMove = { from, to, isCapture };
     myTurn = true;
@@ -152,6 +169,45 @@ socket.on('opponentMove', ({ from, to, promotedPiece, isCapture }) => {
     postMoveChecks();
     renderBoard();
 });
+
+socket.on('gameOverTimeOut', (loserColor) => {
+    clearInterval(timerInterval);
+    const iLost = loserColor === myColor;
+    endGame(iLost ? "Waktu Habis! Kamu Kalah." : "Waktu Lawan Habis! Kamu Menang.");
+});
+
+// --- TIMER & CAPTURED UI LOGIC ---
+function startTimer() {
+    if (timerInterval) clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        if (myTurn && myTime > 0) {
+            myTime--;
+            if (myTime <= 0) {
+                clearInterval(timerInterval);
+                socket.emit('timeOut', { roomCode, loserColor: myColor });
+            }
+        } else if (!myTurn && oppTime > 0) {
+            oppTime--;
+        }
+        updateTimerUI();
+    }, 1000);
+}
+
+function updateTimerUI() {
+    document.getElementById('my-timer').textContent = formatTime(myTime);
+    document.getElementById('opp-timer').textContent = formatTime(oppTime);
+}
+
+function formatTime(seconds) {
+    const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+    const s = (seconds % 60).toString().padStart(2, '0');
+    return `${m}:${s}`;
+}
+
+function updateCapturedUI() {
+    document.getElementById('my-captured').textContent = capturedByMe.map(p => PIECES[p] || p).join(' ');
+    document.getElementById('opp-captured').textContent = capturedByOpp.map(p => PIECES[p] || p).join(' ');
+}
 
 // --- ENGINE CATUR UTAMA ---
 const getColor = (piece) => piece ? (piece === piece.toUpperCase() ? 'white' : 'black') : null;
@@ -266,6 +322,7 @@ const postMoveChecks = () => {
     }
 };
 
+// --- RENDERING UI ---
 function renderBoard() {
     boardElement.innerHTML = '';
     let legalMovesForSelected = [];
@@ -317,7 +374,15 @@ function onSquareClick(r, c, isLegalMove) {
 
     if (selectedSquare) {
         if (isLegalMove) {
-            const isCapture = boardState[r][c] !== '';
+            const targetPiece = boardState[r][c];
+            const isCapture = targetPiece !== '';
+            let capturedPiece = null;
+
+            if (isCapture) {
+                capturedPiece = targetPiece;
+                capturedByMe.push(capturedPiece);
+                updateCapturedUI();
+            }
 
             let promotedPiece = null;
             if (boardState[selectedSquare.r][selectedSquare.c].toLowerCase() === 'p' && (r === 0 || r === 9)) {
@@ -325,7 +390,7 @@ function onSquareClick(r, c, isLegalMove) {
             }
 
             executeMoveOnBoard(boardState, selectedSquare.r, selectedSquare.c, r, c, promotedPiece);
-            const moveData = { from: selectedSquare, to: {r, c}, promotedPiece, isCapture };
+            const moveData = { from: selectedSquare, to: {r, c}, promotedPiece, isCapture, capturedPiece };
             
             socket.emit('move', { roomCode, ...moveData });
             lastMove = moveData;
@@ -357,11 +422,13 @@ function updateTurnUI() {
 
 function endGame(msg) {
     myTurn = false;
+    if (timerInterval) clearInterval(timerInterval);
     document.getElementById('modal-title').textContent = "Pertandingan Selesai";
     document.getElementById('modal-desc').textContent = msg;
     modal.classList.remove('hidden');
 }
 
+// --- KONTROL TAMBAHAN ---
 document.getElementById('btn-flip').addEventListener('click', () => {
     boardElement.classList.toggle('flipped');
 });
