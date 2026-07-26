@@ -1,13 +1,13 @@
 {
   "name": "sentinel-chess-pro",
-  "version": "2.0.0",
-  "description": "Game Catur 10x10 Multiplayer dengan Socket.IO",
+  "version": "2.1.0",
+  "description": "Game Catur 10x10 Cyberpunk Multiplayer dengan Quick Match & Manual Room List",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.22.2",
-    "socket.io": "^4.8.3"
+    "express": "^4.18.2",
+    "socket.io": "^4.7.2"
   }
 }
