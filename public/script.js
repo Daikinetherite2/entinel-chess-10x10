@@ -1,15 +1,19 @@
 const socket = io();
 
-// UI Elements
 const screens = { lobby: document.getElementById('lobby'), waiting: document.getElementById('waiting'), game: document.getElementById('game') };
 const usernameInput = document.getElementById('username');
-const roomInput = document.getElementById('room-input');
+const createRoomNameInput = document.getElementById('create-room-name');
+const createRoomPassInput = document.getElementById('create-room-pass');
 const errorMsg = document.getElementById('error-msg');
 const boardElement = document.getElementById('board');
 const modal = document.getElementById('modal');
 const glitchOverlay = document.getElementById('glitch-overlay');
+const roomListContainer = document.getElementById('room-list-container');
 
-// Game State Variables
+const passwordModal = document.getElementById('password-modal');
+const manualJoinPassInput = document.getElementById('manual-join-pass');
+const targetRoomLabel = document.getElementById('target-room-label');
+
 let myColor = '';
 let myTurn = false;
 let roomCode = '';
@@ -17,6 +21,7 @@ let boardState = [];
 let selectedSquare = null;
 let lastMove = null;
 let kingInCheck = null;
+let selectedRoomToJoin = '';
 
 const PIECES = {
     'r': '♜', 'n': '♞', 's': '♆', 'b': '♝', 'q': '♛', 'k': '♚', 'p': '♟',
@@ -36,22 +41,74 @@ const INITIAL_BOARD = [
     ['R', 'N', 'S', 'B', 'Q', 'K', 'B', 'S', 'N', 'R']
 ];
 
-// Pindah Layar
 const showScreen = (screenName) => {
     Object.values(screens).forEach(s => s.classList.remove('active'));
     screens[screenName].classList.add('active');
+    errorMsg.textContent = '';
 };
 
-// --- LOGIKA LOBBY & SOCKET ---
-document.getElementById('btn-create').addEventListener('click', () => {
-    const user = usernameInput.value.trim() || 'Player1';
-    socket.emit('createRoom', user);
+// --- REAL-TIME ROOM LIST MANUAL ---
+socket.on('roomListUpdate', (rooms) => {
+    roomListContainer.innerHTML = '';
+    const roomKeys = Object.keys(rooms);
+    
+    if (roomKeys.length === 0) {
+        roomListContainer.innerHTML = '<p class="small-text">Tidak ada room manual aktif.</p>';
+        return;
+    }
+
+    roomKeys.forEach(code => {
+        const roomData = rooms[code];
+        const item = document.createElement('div');
+        item.className = 'room-item';
+        
+        const label = document.createElement('span');
+        label.textContent = `${code} (Host: ${roomData.host}) ${roomData.hasPassword ? '🔒' : '🌐'}`;
+        
+        const joinBtn = document.createElement('button');
+        joinBtn.className = 'btn primary';
+        joinBtn.textContent = 'JOIN';
+        
+        joinBtn.addEventListener('click', () => {
+            const username = usernameInput.value.trim() || 'HackerMisterius';
+            if (roomData.hasPassword) {
+                selectedRoomToJoin = code;
+                targetRoomLabel.textContent = `Room "${code}" pakai password:`;
+                manualJoinPassInput.value = '';
+                passwordModal.classList.remove('hidden');
+            } else {
+                socket.emit('joinRoomManual', { username, roomName: code, password: '' });
+            }
+        });
+
+        item.appendChild(label);
+        item.appendChild(joinBtn);
+        roomListContainer.appendChild(item);
+    });
 });
 
-document.getElementById('btn-join').addEventListener('click', () => {
-    const user = usernameInput.value.trim() || 'Player2';
-    const code = roomInput.value.trim().toUpperCase();
-    if(code) socket.emit('joinRoom', { roomCode: code, username: user });
+document.getElementById('btn-submit-pass').addEventListener('click', () => {
+    const username = usernameInput.value.trim() || 'HackerMisterius';
+    const password = manualJoinPassInput.value.trim();
+    passwordModal.classList.add('hidden');
+    socket.emit('joinRoomManual', { username, roomName: selectedRoomToJoin, password });
+});
+
+document.getElementById('btn-cancel-pass').addEventListener('click', () => {
+    passwordModal.classList.add('hidden');
+});
+
+// --- TOMBOL AKSI ---
+document.getElementById('btn-quickmatch').addEventListener('click', () => {
+    const user = usernameInput.value.trim() || 'HackerMisterius';
+    socket.emit('findMatch', user);
+});
+
+document.getElementById('btn-create').addEventListener('click', () => {
+    const username = usernameInput.value.trim() || 'Player1';
+    const roomName = createRoomNameInput.value.trim();
+    const password = createRoomPassInput.value.trim();
+    socket.emit('createRoom', { username, roomName, password });
 });
 
 socket.on('roomCreated', (data) => {
@@ -67,7 +124,7 @@ socket.on('roomJoined', (data) => {
 });
 
 socket.on('startGame', (players) => {
-    boardState = JSON.parse(JSON.stringify(INITIAL_BOARD)); // Clone
+    boardState = JSON.parse(JSON.stringify(INITIAL_BOARD));
     myTurn = myColor === 'white';
     
     document.getElementById('my-name').textContent = myColor === 'white' ? players.white : players.black;
@@ -78,9 +135,7 @@ socket.on('startGame', (players) => {
     updateTurnUI();
     renderBoard();
 
-    // TRIGGER ANIMASI GLITCH JOIN ROOM
     glitchOverlay.classList.remove('hidden');
-    
     setTimeout(() => {
         glitchOverlay.classList.add('hidden');
         showScreen('game');
@@ -99,11 +154,9 @@ socket.on('opponentMove', ({ from, to, promotedPiece, isCapture }) => {
 });
 
 // --- ENGINE CATUR UTAMA ---
-
 const getColor = (piece) => piece ? (piece === piece.toUpperCase() ? 'white' : 'black') : null;
 const isEnemy = (p1, p2) => p1 && p2 && getColor(p1) !== getColor(p2);
 
-// Pseudo-Legal Moves
 const getPseudoLegalMoves = (board, r, c) => {
     const moves = [];
     const piece = board[r][c];
@@ -129,13 +182,10 @@ const getPseudoLegalMoves = (board, r, c) => {
     if (type === 'p') {
         const dir = color === 'white' ? -1 : 1;
         const startRow = color === 'white' ? 8 : 1;
-        // Maju 1
         if (board[r + dir] && board[r + dir][c] === '') {
             moves.push({r: r + dir, c});
-            // Maju 2
             if (r === startRow && board[r + dir * 2][c] === '') moves.push({r: r + dir * 2, c});
         }
-        // Makan silang
         if (board[r + dir] && board[r + dir][c - 1] && isEnemy(piece, board[r + dir][c - 1])) moves.push({r: r + dir, c: c - 1});
         if (board[r + dir] && board[r + dir][c + 1] && isEnemy(piece, board[r + dir][c + 1])) moves.push({r: r + dir, c: c + 1});
     }
@@ -143,13 +193,12 @@ const getPseudoLegalMoves = (board, r, c) => {
     if (type === 'n') [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]].forEach(([dr, dc]) => addIfValid(r+dr, c+dc));
     if (type === 'b' || type === 'q' || type === 's') slide([[-1,-1],[-1,1],[1,-1],[1,1]]);
     if (type === 'r' || type === 'q') slide([[-1,0],[1,0],[0,-1],[0,1]]);
-    if (type === 's') [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]].forEach(([dr, dc]) => addIfValid(r+dr, c+dc)); // SENTINEL (Bishop + Knight)
+    if (type === 's') [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]].forEach(([dr, dc]) => addIfValid(r+dr, c+dc));
     if (type === 'k') [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]].forEach(([dr, dc]) => addIfValid(r+dr, c+dc));
 
     return moves;
 };
 
-// Cek Check
 const isCheck = (board, color) => {
     let kingPos = null;
     for (let r=0; r<10; r++) {
@@ -170,7 +219,6 @@ const isCheck = (board, color) => {
     return false;
 };
 
-// Filter Legal Moves
 const getLegalMoves = (board, r, c) => {
     const color = getColor(board[r][c]);
     const pseudoMoves = getPseudoLegalMoves(board, r, c);
@@ -182,7 +230,6 @@ const getLegalMoves = (board, r, c) => {
     });
 };
 
-// Eksekusi Move
 const executeMoveOnBoard = (board, r1, c1, r2, c2, promotedPiece = null) => {
     let piece = board[r1][c1];
     if (piece.toLowerCase() === 'p' && (r2 === 0 || r2 === 9)) {
@@ -192,7 +239,6 @@ const executeMoveOnBoard = (board, r1, c1, r2, c2, promotedPiece = null) => {
     board[r1][c1] = '';
 };
 
-// Check Status
 const postMoveChecks = () => {
     kingInCheck = null;
     updateTurnUI();
@@ -220,8 +266,6 @@ const postMoveChecks = () => {
     }
 };
 
-// --- RENDERING UI ---
-
 function renderBoard() {
     boardElement.innerHTML = '';
     let legalMovesForSelected = [];
@@ -232,7 +276,6 @@ function renderBoard() {
             const square = document.createElement('div');
             square.className = `square ${(r + c) % 2 === 0 ? 'light' : 'dark'}`;
             
-            // Animasi Hantaman (Capture)
             if (lastMove && lastMove.to.r === r && lastMove.to.c === c && lastMove.isCapture) {
                 square.classList.add('square-captured');
             }
@@ -243,7 +286,6 @@ function renderBoard() {
                 span.className = 'piece';
                 span.textContent = PIECES[piece];
 
-                // Animasi Bidak Meluncur
                 if (lastMove && lastMove.to.r === r && lastMove.to.c === c) {
                     span.classList.add('piece-moved');
                 }
@@ -252,12 +294,10 @@ function renderBoard() {
                 square.appendChild(span);
             }
 
-            // Highlights
             if (lastMove && ((lastMove.from.r === r && lastMove.from.c === c) || (lastMove.to.r === r && lastMove.to.c === c))) square.classList.add('last-move');
             if (selectedSquare && selectedSquare.r === r && selectedSquare.c === c) square.classList.add('selected');
             if (kingInCheck && piece && piece.toLowerCase() === 'k' && getColor(piece) === kingInCheck) square.classList.add('in-check');
             
-            // Dot Legal Moves
             const isLegal = legalMovesForSelected.find(m => m.r === r && m.c === c);
             if (isLegal) {
                 square.classList.add('legal-move-hint');
@@ -322,7 +362,6 @@ function endGame(msg) {
     modal.classList.remove('hidden');
 }
 
-// Kontrol
 document.getElementById('btn-flip').addEventListener('click', () => {
     boardElement.classList.toggle('flipped');
 });
