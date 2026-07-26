@@ -10,25 +10,19 @@
 <body>
 
     <div id="lobby" class="screen active">
-        <div class="logo">| ARCADIA STUDIO PRESENT |</div>
+        <div class="logo"> ARCADIA STUDIO PRESENT </div>
         <div class="logo">♘ SENTINEL CHESS ♞</div>
         <div class="panel">
             <input type="text" id="username" placeholder="Masukkan Nama Anda..." maxlength="12">
-            
             <button id="btn-quickmatch" class="btn warning">⚡ SEARCHING ROOM AUTO</button>
-            
             <div class="divider">// FIND A ROOM MANUAL //</div>
-            
             <div id="room-list-container" class="room-list">
                 <p class="small-text">Mencari room manual tersedia...</p>
             </div>
-
             <div class="divider">// CREATE ROOM //</div>
-            
             <input type="text" id="create-room-name" placeholder="Nama Room Baru">
             <input type="password" id="create-room-pass" placeholder="Password (Opsional)">
             <button id="btn-create" class="btn primary">BUAT ROOM</button>
-            
             <p id="error-msg" class="error"></p>
         </div>
     </div>
@@ -57,7 +51,11 @@
     <div id="game" class="screen">
         <div class="game-container">
             <div class="player-info opponent">
-                <span id="opp-name">Menunggu...</span>
+                <div class="player-meta">
+                    <span id="opp-name">Menunggu...</span>
+                    <span id="opp-captured" class="captured-box"></span>
+                </div>
+                <div class="timer-display" id="opp-timer">05:00</div>
                 <span id="opp-status" class="status-indicator"></span>
             </div>
 
@@ -66,7 +64,11 @@
             </div>
 
             <div class="player-info us">
-                <span id="my-name">Player</span>
+                <div class="player-meta">
+                    <span id="my-name">Player</span>
+                    <span id="my-captured" class="captured-box"></span>
+                </div>
+                <div class="timer-display" id="my-timer">05:00</div>
                 <span id="my-status" class="status-indicator active">Giliran Kamu</span>
             </div>
 
