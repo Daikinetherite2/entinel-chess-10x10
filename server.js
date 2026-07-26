@@ -28,7 +28,6 @@ io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
     updateRoomList();
 
-    // --- QUICK MATCH (Auto) ---
     socket.on('findMatch', (username) => {
         let foundRoomCode = null;
         for (const code in rooms) {
@@ -57,7 +56,6 @@ io.on('connection', (socket) => {
         }
     });
 
-    // --- CREATE ROOM MANUAL ---
     socket.on('createRoom', ({ username, roomName, password }) => {
         if (!roomName) return socket.emit('errorMsg', 'Nama Room tidak boleh kosong!');
         if (rooms[roomName]) return socket.emit('errorMsg', 'Nama Room sudah terpakai!');
@@ -72,13 +70,10 @@ io.on('connection', (socket) => {
         updateRoomList();
     });
 
-    // --- JOIN ROOM MANUAL ---
     socket.on('joinRoomManual', ({ username, roomName, password }) => {
         const room = rooms[roomName];
-        
         if (!room) return socket.emit('errorMsg', 'Room tidak ditemukan!');
         if (room.players.length >= 2) return socket.emit('errorMsg', 'Room sudah penuh!');
-        
         if (room.password && room.password !== password) {
             return socket.emit('errorMsg', 'Password salah!');
         }
@@ -96,6 +91,10 @@ io.on('connection', (socket) => {
 
     socket.on('move', (data) => {
         socket.to(data.roomCode).emit('opponentMove', data);
+    });
+
+    socket.on('timeOut', ({ roomCode, loserColor }) => {
+        io.to(roomCode).emit('gameOverTimeOut', loserColor);
     });
 
     socket.on('resign', (roomCode) => {
