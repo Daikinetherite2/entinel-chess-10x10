@@ -10,25 +10,47 @@
 <body>
 
     <div id="lobby" class="screen active">
+        <div class="logo">| ARCADIA STUDIO PRESENT |</div>
         <div class="logo">♘ SENTINEL CHESS ♞</div>
         <div class="panel">
-            <input type="text" id="username" placeholder="Masukkan Username..." maxlength="12">
-            <div class="actions">
-                <button id="btn-create" class="btn primary">Buat Room</button>
-                <div class="divider">// ATAU //</div>
-                <input type="text" id="room-input" placeholder="Kode Room (Contoh: A1B2C3)">
-                <button id="btn-join" class="btn secondary">Join Room</button>
+            <input type="text" id="username" placeholder="Masukkan Nama Anda..." maxlength="12">
+            
+            <button id="btn-quickmatch" class="btn warning">⚡ SEARCHING ROOM AUTO</button>
+            
+            <div class="divider">// FIND A ROOM MANUAL //</div>
+            
+            <div id="room-list-container" class="room-list">
+                <p class="small-text">Mencari room manual tersedia...</p>
             </div>
+
+            <div class="divider">// CREATE ROOM //</div>
+            
+            <input type="text" id="create-room-name" placeholder="Nama Room Baru">
+            <input type="password" id="create-room-pass" placeholder="Password (Opsional)">
+            <button id="btn-create" class="btn primary">BUAT ROOM</button>
+            
             <p id="error-msg" class="error"></p>
+        </div>
+    </div>
+
+    <div id="password-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2>ROOM TERPROTEKSI</h2>
+            <p id="target-room-label">Masukkan password untuk masuk:</p>
+            <input type="password" id="manual-join-pass" placeholder="Password Room...">
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button id="btn-submit-pass" class="btn primary" style="margin-bottom:0;">MASUK</button>
+                <button id="btn-cancel-pass" class="btn danger" style="margin-bottom:0;">BATAL</button>
+            </div>
         </div>
     </div>
 
     <div id="waiting" class="screen">
         <div class="panel">
             <h2>MENUNGGU LAWAN...</h2>
-            <p>Kode Room Kamu:</p>
+            <p>Nama Room Kamu:</p>
             <h1 id="display-room-code" class="highlight-text"></h1>
-            <p class="small-text">Bagikan kode ini ke lawan mainmu.</p>
+            <p class="small-text">Bagikan nama room ke temanmu atau tunggu lawan masuk.</p>
         </div>
     </div>
 
@@ -49,9 +71,9 @@
             </div>
 
             <div class="game-controls">
-                <button id="btn-resign" class="btn danger">🏳️ Resign</button>
-                <button id="btn-draw" class="btn warning">🤝 Draw</button>
-                <button id="btn-flip" class="btn secondary">🔄 Flip</button>
+                <button id="btn-resign" class="btn danger">🏳️ RESIGN</button>
+                <button id="btn-draw" class="btn warning">🤝 DRAW</button>
+                <button id="btn-flip" class="btn secondary">🔄 FLIP</button>
             </div>
         </div>
     </div>
