@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sentinel Chess Pro</title>
+    <title>Sentinel Chess Pro 10x10 - Cyberpunk Edition</title>
     <link rel="stylesheet" href="style.css">
     <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
 
     <div id="lobby" class="screen active">
-        <div class="logo">♘ Sentinel Chess Pro ♞</div>
+        <div class="logo">♘ SENTINEL CHESS ♞</div>
         <div class="panel">
             <input type="text" id="username" placeholder="Masukkan Username..." maxlength="12">
             <div class="actions">
                 <button id="btn-create" class="btn primary">Buat Room</button>
-                <div class="divider">ATAU</div>
+                <div class="divider">// ATAU //</div>
                 <input type="text" id="room-input" placeholder="Kode Room (Contoh: A1B2C3)">
                 <button id="btn-join" class="btn secondary">Join Room</button>
             </div>
@@ -25,7 +25,7 @@
 
     <div id="waiting" class="screen">
         <div class="panel">
-            <h2>Menunggu Lawan...</h2>
+            <h2>MENUNGGU LAWAN...</h2>
             <p>Kode Room Kamu:</p>
             <h1 id="display-room-code" class="highlight-text"></h1>
             <p class="small-text">Bagikan kode ini ke lawan mainmu.</p>
@@ -50,8 +50,8 @@
 
             <div class="game-controls">
                 <button id="btn-resign" class="btn danger">🏳️ Resign</button>
-                <button id="btn-draw" class="btn warning">🤝 Tawarkan Draw</button>
-                <button id="btn-flip" class="btn secondary">🔄 Flip Board</button>
+                <button id="btn-draw" class="btn warning">🤝 Draw</button>
+                <button id="btn-flip" class="btn secondary">🔄 Flip</button>
             </div>
         </div>
     </div>
@@ -60,8 +60,13 @@
         <div class="modal-content">
             <h2 id="modal-title">Game Over</h2>
             <p id="modal-desc"></p>
-            <button onclick="location.reload()" class="btn primary">Kembali ke Lobby</button>
+            <button onclick="location.reload()" class="btn primary">KEMBALI KE LOBBY</button>
         </div>
+    </div>
+
+    <div id="glitch-overlay" class="glitch-overlay hidden">
+        <h1 class="glitch-text" data-text="UPLINK ESTABLISHED">UPLINK ESTABLISHED</h1>
+        <p>INITIALIZING BATTLEFIELD...</p>
     </div>
 
     <script src="script.js"></script>
