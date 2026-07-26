@@ -9,44 +9,95 @@ const io = new Server(server);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Menyimpan data room
 const rooms = {}; 
+
+function updateRoomList() {
+    const publicRooms = {};
+    for (const code in rooms) {
+        if (rooms[code].players.length === 1) {
+            publicRooms[code] = {
+                hasPassword: !!rooms[code].password,
+                host: rooms[code].players[0].username
+            };
+        }
+    }
+    io.emit('roomListUpdate', publicRooms);
+}
 
 io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
+    updateRoomList();
 
-    // Bikin Room Baru
-    socket.on('createRoom', (username) => {
-        const roomCode = Math.random().toString(36).substring(2, 8).toUpperCase();
-        rooms[roomCode] = { players: [{ id: socket.id, username, color: 'white' }] };
-        socket.join(roomCode);
-        socket.emit('roomCreated', { roomCode, color: 'white' });
-    });
+    // --- QUICK MATCH (Auto) ---
+    socket.on('findMatch', (username) => {
+        let foundRoomCode = null;
+        for (const code in rooms) {
+            if (rooms[code].players.length === 1 && !rooms[code].password) {
+                foundRoomCode = code;
+                break;
+            }
+        }
 
-    // Join Room
-    socket.on('joinRoom', ({ roomCode, username }) => {
-        const room = rooms[roomCode];
-        if (room && room.players.length === 1) {
-            room.players.push({ id: socket.id, username, color: 'black' });
-            socket.join(roomCode);
-            socket.emit('roomJoined', { roomCode, color: 'black' });
+        if (foundRoomCode) {
+            rooms[foundRoomCode].players.push({ id: socket.id, username, color: 'black' });
+            socket.join(foundRoomCode);
+            socket.emit('roomJoined', { roomCode: foundRoomCode, color: 'black' });
             
-            // Beritahu kedua pemain game dimulai
-            io.to(roomCode).emit('startGame', {
-                white: room.players[0].username,
+            io.to(foundRoomCode).emit('startGame', {
+                white: rooms[foundRoomCode].players[0].username,
                 black: username
             });
+            updateRoomList();
         } else {
-            socket.emit('errorMsg', 'Room penuh atau tidak ditemukan!');
+            const newRoomCode = "AUTO-" + Math.random().toString(36).substring(2, 6).toUpperCase();
+            rooms[newRoomCode] = { players: [{ id: socket.id, username, color: 'white' }], password: '' };
+            socket.join(newRoomCode);
+            socket.emit('roomCreated', { roomCode: newRoomCode, color: 'white' });
+            updateRoomList();
         }
     });
 
-    // Handle Gerakan (Move)
+    // --- CREATE ROOM MANUAL ---
+    socket.on('createRoom', ({ username, roomName, password }) => {
+        if (!roomName) return socket.emit('errorMsg', 'Nama Room tidak boleh kosong!');
+        if (rooms[roomName]) return socket.emit('errorMsg', 'Nama Room sudah terpakai!');
+
+        rooms[roomName] = { 
+            players: [{ id: socket.id, username, color: 'white' }], 
+            password: password || '' 
+        };
+        
+        socket.join(roomName);
+        socket.emit('roomCreated', { roomCode: roomName, color: 'white' });
+        updateRoomList();
+    });
+
+    // --- JOIN ROOM MANUAL ---
+    socket.on('joinRoomManual', ({ username, roomName, password }) => {
+        const room = rooms[roomName];
+        
+        if (!room) return socket.emit('errorMsg', 'Room tidak ditemukan!');
+        if (room.players.length >= 2) return socket.emit('errorMsg', 'Room sudah penuh!');
+        
+        if (room.password && room.password !== password) {
+            return socket.emit('errorMsg', 'Password salah!');
+        }
+
+        room.players.push({ id: socket.id, username, color: 'black' });
+        socket.join(roomName);
+        socket.emit('roomJoined', { roomCode: roomName, color: 'black' });
+        
+        io.to(roomName).emit('startGame', {
+            white: room.players[0].username,
+            black: username
+        });
+        updateRoomList();
+    });
+
     socket.on('move', (data) => {
         socket.to(data.roomCode).emit('opponentMove', data);
     });
 
-    // Handle Resign & Draw
     socket.on('resign', (roomCode) => {
         socket.to(roomCode).emit('opponentResigned');
     });
@@ -61,11 +112,17 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', () => {
         console.log('User disconnected:', socket.id);
-        // Clean up room jika pemain disconnect (bisa ditambahkan logika lanjutan)
+        for (const code in rooms) {
+            rooms[code].players = rooms[code].players.filter(p => p.id !== socket.id);
+            if (rooms[code].players.length === 0) {
+                delete rooms[code];
+            }
+        }
+        updateRoomList();
     });
 });
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-    console.log(`Server jalan di http://localhost:${PORT}`);
+    console.log(`Server SentinelChess Cyberpunk berjalan di http://localhost:${PORT}`);
 });
