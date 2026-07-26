@@ -1,0 +1,79 @@
+:root {
+    --bg-dark: #312e2b;
+    --panel-bg: #262421;
+    --light-square: #ebecd0;
+    --dark-square: #739552;
+    --highlight: rgba(255, 255, 51, 0.5);
+    --legal-move: rgba(0, 0, 0, 0.15);
+    --primary: #81b64c;
+    --secondary: #454341;
+    --danger: #fa412d;
+    --text: #ffffff;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+
+body { background-color: var(--bg-dark); color: var(--text); height: 100vh; display: flex; justify-content: center; align-items: center; touch-action: manipulation; }
+
+/* Screen Management */
+.screen { display: none; width: 100%; max-width: 600px; padding: 20px; flex-direction: column; align-items: center; }
+.screen.active { display: flex; }
+
+/* Panels & Inputs */
+.panel { background-color: var(--panel-bg); padding: 30px; border-radius: 10px; width: 100%; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+.logo { font-size: 32px; font-weight: bold; margin-bottom: 20px; color: var(--primary); }
+input[type="text"] { width: 100%; padding: 12px; margin-bottom: 15px; border: none; border-radius: 5px; background: #3c3a38; color: white; font-size: 16px; outline: none; }
+input[type="text"]:focus { border: 1px solid var(--primary); }
+
+/* Buttons */
+.btn { padding: 12px 20px; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; color: white; width: 100%; transition: 0.2s; margin-bottom: 10px; }
+.btn.primary { background-color: var(--primary); }
+.btn.primary:hover { background-color: #a3d160; }
+.btn.secondary { background-color: var(--secondary); }
+.btn.secondary:hover { background-color: #5c5956; }
+.btn.danger { background-color: var(--danger); }
+.btn.warning { background-color: #f39c12; }
+.divider { margin: 15px 0; color: #888; font-size: 14px; }
+.highlight-text { color: var(--primary); letter-spacing: 3px; margin: 15px 0; }
+.error { color: var(--danger); font-size: 14px; margin-top: 10px; }
+
+/* Game Area */
+.game-container { width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 10px; }
+.player-info { display: flex; justify-content: space-between; align-items: center; background: var(--panel-bg); padding: 10px 15px; border-radius: 5px; font-weight: bold; }
+.status-indicator { font-size: 12px; padding: 4px 8px; border-radius: 4px; background: #555; opacity: 0; }
+.status-indicator.active { opacity: 1; background: var(--primary); }
+
+/* Board */
+.board-wrapper { width: 100%; aspect-ratio: 1/1; position: relative; }
+.board { display: grid; grid-template-columns: repeat(10, 1fr); grid-template-rows: repeat(10, 1fr); width: 100%; height: 100%; border-radius: 4px; overflow: hidden; transition: transform 0.5s ease; }
+.board.flipped { transform: rotate(180deg); }
+
+.square { display: flex; justify-content: center; align-items: center; font-size: clamp(20px, 7vw, 45px); cursor: pointer; position: relative; user-select: none; }
+.board.flipped .square { transform: rotate(-180deg); /* Bidak tetap berdiri tegak */ }
+.light { background-color: var(--light-square); }
+.dark { background-color: var(--dark-square); }
+
+/* Interaksi Papan */
+.selected { background-color: var(--highlight) !important; }
+.last-move { background-color: rgba(255, 255, 0, 0.3) !important; }
+.in-check { background-color: rgba(250, 65, 45, 0.8) !important; }
+
+/* Dot untuk Legal Move */
+.legal-move-hint::after { content: ''; position: absolute; width: 30%; height: 30%; background-color: var(--legal-move); border-radius: 50%; }
+.legal-move-hint.capture-hint::after { background-color: transparent; border: 4px solid var(--legal-move); width: 80%; height: 80%; }
+
+/* Styling Bidak (Menggunakan Gambar/Emoji) */
+.piece { transition: transform 0.2s ease-in-out; /* Animasi Gerak */ }
+.white-sentinel { color: white; text-shadow: 0 0 3px #000; font-weight: bold; }
+.black-sentinel { color: black; text-shadow: 0 0 3px #fff; font-weight: bold; }
+
+/* Controls */
+.game-controls { display: flex; gap: 10px; margin-top: 10px; }
+.game-controls .btn { margin-bottom: 0; font-size: 14px; padding: 10px; }
+
+/* Modal */
+.modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 100; }
+.modal.hidden { display: none; }
+.modal-content { background: var(--panel-bg); padding: 30px; border-radius: 10px; text-align: center; width: 90%; max-width: 400px; }
+.modal-content h2 { margin-bottom: 10px; }
+.modal-content p { margin-bottom: 20px; color: #ccc; }
