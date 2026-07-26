@@ -7,6 +7,7 @@ const roomInput = document.getElementById('room-input');
 const errorMsg = document.getElementById('error-msg');
 const boardElement = document.getElementById('board');
 const modal = document.getElementById('modal');
+const glitchOverlay = document.getElementById('glitch-overlay');
 
 // Game State Variables
 let myColor = '';
@@ -76,14 +77,21 @@ socket.on('startGame', (players) => {
     
     updateTurnUI();
     renderBoard();
-    showScreen('game');
+
+    // TRIGGER ANIMASI GLITCH JOIN ROOM
+    glitchOverlay.classList.remove('hidden');
+    
+    setTimeout(() => {
+        glitchOverlay.classList.add('hidden');
+        showScreen('game');
+    }, 1800);
 });
 
 socket.on('errorMsg', (msg) => { errorMsg.textContent = msg; });
 
-socket.on('opponentMove', ({ from, to, promotedPiece }) => {
+socket.on('opponentMove', ({ from, to, promotedPiece, isCapture }) => {
     executeMoveOnBoard(boardState, from.r, from.c, to.r, to.c, promotedPiece);
-    lastMove = { from, to };
+    lastMove = { from, to, isCapture };
     myTurn = true;
     
     postMoveChecks();
@@ -95,7 +103,7 @@ socket.on('opponentMove', ({ from, to, promotedPiece }) => {
 const getColor = (piece) => piece ? (piece === piece.toUpperCase() ? 'white' : 'black') : null;
 const isEnemy = (p1, p2) => p1 && p2 && getColor(p1) !== getColor(p2);
 
-// Pseudo-Legal Moves (Cara gerak dasar bidak tanpa peduli skak)
+// Pseudo-Legal Moves
 const getPseudoLegalMoves = (board, r, c) => {
     const moves = [];
     const piece = board[r][c];
@@ -106,7 +114,7 @@ const getPseudoLegalMoves = (board, r, c) => {
     const addIfValid = (nr, nc) => {
         if (nr >= 0 && nr < 10 && nc >= 0 && nc < 10) {
             if (!board[nr][nc] || isEnemy(piece, board[nr][nc])) moves.push({r: nr, c: nc});
-            return !board[nr][nc]; // Return true kalau kosong (buat sliding pieces)
+            return !board[nr][nc];
         }
         return false;
     };
@@ -135,13 +143,13 @@ const getPseudoLegalMoves = (board, r, c) => {
     if (type === 'n') [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]].forEach(([dr, dc]) => addIfValid(r+dr, c+dc));
     if (type === 'b' || type === 'q' || type === 's') slide([[-1,-1],[-1,1],[1,-1],[1,1]]);
     if (type === 'r' || type === 'q') slide([[-1,0],[1,0],[0,-1],[0,1]]);
-    if (type === 's') [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]].forEach(([dr, dc]) => addIfValid(r+dr, c+dc)); // Sentinel +Kuda
+    if (type === 's') [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]].forEach(([dr, dc]) => addIfValid(r+dr, c+dc)); // SENTINEL (Bishop + Knight)
     if (type === 'k') [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]].forEach(([dr, dc]) => addIfValid(r+dr, c+dc));
 
     return moves;
 };
 
-// Cek apakah posisi warna tertentu sedang di-Skak
+// Cek Check
 const isCheck = (board, color) => {
     let kingPos = null;
     for (let r=0; r<10; r++) {
@@ -151,7 +159,6 @@ const isCheck = (board, color) => {
     }
     if (!kingPos) return false;
 
-    // Cek apakah ada bidak musuh yang bisa menyerang King
     for (let r=0; r<10; r++) {
         for (let c=0; c<10; c++) {
             if (getColor(board[r][c]) && getColor(board[r][c]) !== color) {
@@ -163,12 +170,11 @@ const isCheck = (board, color) => {
     return false;
 };
 
-// Filter gerak legal (simulasi gerak, cek kalau bikin diri sendiri terskak)
+// Filter Legal Moves
 const getLegalMoves = (board, r, c) => {
     const color = getColor(board[r][c]);
     const pseudoMoves = getPseudoLegalMoves(board, r, c);
     return pseudoMoves.filter(move => {
-        // Simulasi
         const tempBoard = board.map(row => [...row]);
         tempBoard[move.r][move.c] = tempBoard[r][c];
         tempBoard[r][c] = '';
@@ -176,10 +182,9 @@ const getLegalMoves = (board, r, c) => {
     });
 };
 
-// Eksekusi gerak di data array
+// Eksekusi Move
 const executeMoveOnBoard = (board, r1, c1, r2, c2, promotedPiece = null) => {
     let piece = board[r1][c1];
-    // Pawn Promotion Otomatis ke Queen jika sampai ujung
     if (piece.toLowerCase() === 'p' && (r2 === 0 || r2 === 9)) {
         piece = promotedPiece || (getColor(piece) === 'white' ? 'Q' : 'q');
     }
@@ -187,7 +192,7 @@ const executeMoveOnBoard = (board, r1, c1, r2, c2, promotedPiece = null) => {
     board[r1][c1] = '';
 };
 
-// Cek status setelah gerak
+// Check Status
 const postMoveChecks = () => {
     kingInCheck = null;
     updateTurnUI();
@@ -195,7 +200,6 @@ const postMoveChecks = () => {
     const myColorTurn = (myTurn && myColor === 'white') || (!myTurn && myColor === 'black') ? 'white' : 'black';
     const isCurrentlyCheck = isCheck(boardState, myColorTurn);
     
-    // Cek apakah ada langkah legal sama sekali
     let hasLegalMoves = false;
     for (let r=0; r<10; r++) {
         for (let c=0; c<10; c++) {
@@ -228,11 +232,22 @@ function renderBoard() {
             const square = document.createElement('div');
             square.className = `square ${(r + c) % 2 === 0 ? 'light' : 'dark'}`;
             
+            // Animasi Hantaman (Capture)
+            if (lastMove && lastMove.to.r === r && lastMove.to.c === c && lastMove.isCapture) {
+                square.classList.add('square-captured');
+            }
+
             const piece = boardState[r][c];
             if (piece) {
                 const span = document.createElement('span');
                 span.className = 'piece';
                 span.textContent = PIECES[piece];
+
+                // Animasi Bidak Meluncur
+                if (lastMove && lastMove.to.r === r && lastMove.to.c === c) {
+                    span.classList.add('piece-moved');
+                }
+
                 if (piece.toLowerCase() === 's') span.classList.add(piece === 'S' ? 'white-sentinel' : 'black-sentinel');
                 square.appendChild(span);
             }
@@ -256,20 +271,21 @@ function renderBoard() {
 }
 
 function onSquareClick(r, c, isLegalMove) {
-    if (!myTurn) return; // Bukan giliranmu
+    if (!myTurn) return;
 
     const clickedPiece = boardState[r][c];
 
     if (selectedSquare) {
         if (isLegalMove) {
-            // Gerak
+            const isCapture = boardState[r][c] !== '';
+
             let promotedPiece = null;
             if (boardState[selectedSquare.r][selectedSquare.c].toLowerCase() === 'p' && (r === 0 || r === 9)) {
-                promotedPiece = myColor === 'white' ? 'Q' : 'q'; // Auto Promote ke Queen
+                promotedPiece = myColor === 'white' ? 'Q' : 'q';
             }
 
             executeMoveOnBoard(boardState, selectedSquare.r, selectedSquare.c, r, c, promotedPiece);
-            const moveData = { from: selectedSquare, to: {r, c}, promotedPiece };
+            const moveData = { from: selectedSquare, to: {r, c}, promotedPiece, isCapture };
             
             socket.emit('move', { roomCode, ...moveData });
             lastMove = moveData;
@@ -279,10 +295,10 @@ function onSquareClick(r, c, isLegalMove) {
             postMoveChecks();
             renderBoard();
         } else if (getColor(clickedPiece) === myColor) {
-            selectedSquare = { r, c }; // Pindah pilihan bidak
+            selectedSquare = { r, c };
             renderBoard();
         } else {
-            selectedSquare = null; // Batal pilih
+            selectedSquare = null;
             renderBoard();
         }
     } else {
@@ -306,7 +322,7 @@ function endGame(msg) {
     modal.classList.remove('hidden');
 }
 
-// --- KONTROL TAMBAHAN ---
+// Kontrol
 document.getElementById('btn-flip').addEventListener('click', () => {
     boardElement.classList.toggle('flipped');
 });
