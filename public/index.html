@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sentinel Chess Pro 10x10 - Cyberpunk Edition</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="logo.png">
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+
+    <select id="lang-selector" class="lang-floating">
+        <option value="id" selected>🇮🇩 ID</option>
+        <option value="ms">🇲🇾 MS</option>
+        <option value="en">🇬🇧 EN</option>
+        <option value="zh">🇨🇳 ZH</option>
+    </select>
+
+    <div id="lobby" class="screen active">
+        <div class="logo"> ARCADIA STUDIO PRESENT </div>
+        <img src="logo.png" alt="Logo Studio" style="width: 80px; height: auto; margin-bottom: 10px;">
+        <div class="logo">♘ SENTINEL CHESS ♞</div>
+        
+        <div class="panel">
+            <input type="text" id="username" data-i18n-ph="input_name" placeholder="Masukkan Nama Anda..." maxlength="12">
+            
+            <button id="btn-quickmatch" class="btn warning" data-i18n="btn_auto">⚡ SEARCHING ROOM AUTO</button>
+            
+            <select id="ai-level" class="btn secondary" style="background-color: #1a0b2e; border: 1px solid var(--primary); margin-bottom: 5px; color: var(--primary);">
+                <option value="1" data-i18n="ai_easy">🟢 AI LEVEL: EASY (Noob)</option>
+                <option value="2" selected data-i18n="ai_normal">🟡 AI LEVEL: NORMAL (Tukang Makan)</option>
+                <option value="3" data-i18n="ai_hard">🔴 AI LEVEL: HARD (Pro & Safety)</option>
+            </select>
+            <button id="btn-vs-ai" class="btn primary" style="background-color: #ff007f; color: white;" data-i18n="btn_ai">🤖 PLAY VS AI</button>
+            
+            <div class="divider" data-i18n="div_manual">// FIND A ROOM MANUAL //</div>
+            <div id="room-list-container" class="room-list">
+                <p class="small-text" data-i18n="searching_room">Mencari room manual tersedia...</p>
+            </div>
+            
+            <div class="divider" data-i18n="div_create">// CREATE ROOM //</div>
+            <input type="text" id="create-room-name" data-i18n-ph="room_name" placeholder="Nama Room Baru">
+            <input type="password" id="create-room-pass" data-i18n-ph="room_pass" placeholder="Password (Opsional)">
+            
+            <select id="create-room-timer" class="btn secondary" style="background-color: #1a0b2e; border: 1px solid var(--primary); margin-bottom: 10px; color: var(--primary);">
+                <option value="60" data-i18n="time_1m">⏱️ Timer: Bullet (1 Menit)</option>
+                <option value="180" data-i18n="time_3m">⏱️ Timer: Blitz (3 Menit)</option>
+                <option value="300" selected data-i18n="time_5m">⏱️ Timer: Standard (5 Menit)</option>
+                <option value="600" data-i18n="time_10m">⏱️ Timer: Rapid (10 Menit)</option>
+            </select>
+
+            <button id="btn-create" class="btn primary" data-i18n="btn_create">BUAT ROOM</button>
+            <p id="error-msg" class="error"></p>
+        </div>
+    </div>
+
+    <div id="password-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2 data-i18n="modal_pass_title">ROOM TERPROTEKSI</h2>
+            <p id="target-room-label" data-i18n="modal_pass_label">Masukkan password untuk masuk:</p>
+            <input type="password" id="manual-join-pass" placeholder="***">
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button id="btn-submit-pass" class="btn primary" style="margin-bottom:0;" data-i18n="btn_submit">MASUK</button>
+                <button id="btn-cancel-pass" class="btn danger" style="margin-bottom:0;" data-i18n="btn_cancel">BATAL</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="waiting" class="screen">
+        <div class="panel">
+            <h2 data-i18n="wait_title">MENUNGGU LAWAN...</h2>
+            <p data-i18n="wait_desc">Nama Room Kamu:</p>
+            <h1 id="display-room-code" class="highlight-text"></h1>
+            <p class="small-text" data-i18n="wait_sub">Bagikan nama room ke temanmu atau tunggu lawan masuk.</p>
+        </div>
+    </div>
+
+    <div id="game" class="screen">
+        <div class="game-layout">
+            
+            <div class="game-main">
+                <div class="player-info opponent">
+                    <div class="player-meta">
+                        <span id="opp-name" data-i18n="opp_waiting">Menunggu...</span>
+                        <span id="opp-captured" class="captured-box"></span>
+                    </div>
+                    <div class="timer-display" id="opp-timer">05:00</div>
+                    <span id="opp-status" class="status-indicator"></span>
+                </div>
+
+                <div class="board-wrapper">
+                    <div id="board" class="board"></div>
+                </div>
+
+                <div class="player-info us">
+                    <div class="player-meta">
+                        <span id="my-name">Player</span>
+                        <span id="my-captured" class="captured-box"></span>
+                    </div>
+                    <div class="timer-display" id="my-timer">05:00</div>
+                    <span id="my-status" class="status-indicator active" data-i18n="your_turn">Giliran Kamu</span>
+                </div>
+
+                <div class="game-controls">
+                    <button id="btn-resign" class="btn danger" data-i18n="btn_resign">🏳️ RESIGN</button>
+                    <button id="btn-draw" class="btn warning" data-i18n="btn_draw">🤝 DRAW</button>
+                    <button id="btn-flip" class="btn secondary" data-i18n="btn_flip">🔄 FLIP</button>
+                </div>
+            </div>
+
+            <button id="btn-toggle-chat" class="btn-toggle-chat">💬 CHAT & LOG</button>
+
+            <div class="side-panel" id="side-panel">
+                <button id="btn-close-chat" class="btn-close-chat" data-i18n="btn_close_chat">✖ TUTUP</button>
+                
+                <div class="panel-header" data-i18n="log_title">📝 MOVE LOG</div>
+                <div id="move-history" class="move-history">
+                    <div class="move-header" data-i18n="log_no">No.</div>
+                    <div class="move-header" data-i18n="log_white">Putih</div>
+                    <div class="move-header" data-i18n="log_black">Hitam</div>
+                </div>
+                
+                <div class="panel-header" data-i18n="chat_title">💬 TERMINAL CHAT</div>
+                <div id="chat-messages" class="chat-messages"></div>
+                <input type="text" id="chat-input" class="chat-input" data-i18n-ph="chat_ph" placeholder="> Ketik pesan lalu Enter...">
+            </div>
+
+        </div>
+    </div>
+
+    <div id="modal" class="modal hidden">
+        <div class="modal-content">
+            <h2 id="modal-title" data-i18n="go_title">Game Over</h2>
+            <p id="modal-desc"></p>
+            <button onclick="location.reload()" class="btn primary" data-i18n="btn_back">KEMBALI KE LOBBY</button>
+        </div>
+    </div>
+
+    <div id="glitch-overlay" class="glitch-overlay hidden">
+        <h1 class="glitch-text" id="glitch-main" data-i18n="glitch_text" data-text="UPLINK ESTABLISHED">UPLINK ESTABLISHED</h1>
+        <p data-i18n="glitch_sub">INITIALIZING BATTLEFIELD...</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
