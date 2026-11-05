@@ -92,6 +92,103 @@ const TRANSLATIONS = {
     }
 };
 
+// Professional lobby & arena copy (kept separate for simple future editing)
+const UI_COPY = {
+  id: {
+    nav_play:'Main', nav_rooms:'Room', nav_guide:'Panduan', hero_eyebrow:'DIMENSI BARU STRATEGI',
+    hero_title_1:'Langkah berikutnya', hero_title_2:'milikmu.',
+    hero_description:'Lebih banyak petak. Lebih banyak strategi. Rasakan catur 10×10 dengan bidak Sentinel eksklusif, pertandingan online, dan lawan AI.',
+    btn_explore:'Lihat room ↗', benefit_1:'Multiplayer real-time', benefit_2:'3 tingkat kesulitan AI',
+    board_eyebrow:'MEMPERKENALKAN', board_title:'Arena yang lebih besar.', sentinel_title:'Kenali bidak Sentinel.',
+    sentinel_description:'Bidak unik yang memadukan langkah gajah dan kuda. Satu gerakan dapat mengubah segalanya.',
+    sentinel_footnote:'BIDAK EKSKLUSIF 10×10', stat_squares:'Petak papan', stat_languages:'Bahasa', stat_moves:'Kemungkinan',
+    play_label:'PERTANDINGANMU', play_heading:'Siap bermain?', play_description:'Siapkan profil dan pilih cara bermain favoritmu.',
+    username_label:'NAMA PEMAIN', computer_heading:'LAWAN KOMPUTER', difficulty_label:'TINGKAT KESULITAN', time_label:'BATAS WAKTU',
+    play_note:'Tidak perlu akun untuk mulai bermain.', multiplayer_label:'MULTIPLAYER', rooms_heading:'Room tersedia',
+    create_heading:'BUAT ROOM SENDIRI', footer_tagline:'Dibuat untuk generasi pemikir berikutnya.',
+    waiting_eyebrow:'LOBBY MATCHMAKING', btn_copy:'SALIN', btn_leave:'← Kembali ke lobby', arena_label:'PERTANDINGAN BERLANGSUNG',
+    arena_heading:'Arena pertandingan', opponent_label:'LAWAN', you_label:'KAMU', mobile_chat:'💬 Chat & langkah',
+    guide_eyebrow:'PANDUAN SINGKAT', guide_heading:'Cara bermain Sentinel Chess',
+    guide_intro:'Sentinel Chess dimainkan di papan 10×10. Aturan dasarnya mirip catur biasa, dengan dua bidak Sentinel tambahan.',
+    guide_rule1:'Klik bidak untuk melihat langkah legal, kemudian klik petak tujuan.',
+    guide_rule2:'Sentinel (♆) memiliki kombinasi langkah gajah dan kuda.',
+    guide_rule3:'Lakukan skakmat sebelum waktumu habis.', guide_done:'Mengerti', copied:'Kode room berhasil disalin!',
+    leave_match_confirm:'Tinggalkan pertandingan ini? Game akan berakhir.',
+    offline:'Terputus', online:'ONLINE', connecting:'Menghubungkan...', opponent_left:'Lawan meninggalkan pertandingan.',
+    waiting_left:'Kembali ke lobby.', no_chat_ai:'Lawan AI tidak mendukung chat online.'
+  },
+  ms: {
+    nav_play:'Main', nav_rooms:'Bilik', nav_guide:'Panduan', hero_eyebrow:'DIMENSI BAHARU STRATEGI',
+    hero_title_1:'Langkah seterusnya', hero_title_2:'milik anda.',
+    hero_description:'Lebih banyak petak, lebih banyak strategi. Alami catur 10×10 dengan bidak Sentinel eksklusif, perlawanan dalam talian dan AI.',
+    btn_explore:'Lihat bilik ↗', benefit_1:'Multiplayer masa nyata', benefit_2:'3 tahap kesukaran AI',
+    board_eyebrow:'MEMPERKENALKAN', board_title:'Medan lebih besar.', sentinel_title:'Kenali Sentinel.',
+    sentinel_description:'Bidak unik yang menggabungkan pergerakan bishop dan knight. Satu langkah boleh mengubah permainan.',
+    sentinel_footnote:'BIDAK EKSKLUSIF 10×10', stat_squares:'Petak papan', stat_languages:'Bahasa', stat_moves:'Kemungkinan',
+    play_label:'PERLAWANAN ANDA', play_heading:'Sedia bermain?', play_description:'Sediakan nama dan pilih cara bermain pilihan anda.',
+    username_label:'NAMA PEMAIN', computer_heading:'LAWAN KOMPUTER', difficulty_label:'KESUKARAN', time_label:'HAD MASA',
+    play_note:'Tidak perlu akaun untuk mula bermain.', multiplayer_label:'MULTIPLAYER', rooms_heading:'Bilik tersedia',
+    create_heading:'CIPTA BILIK SENDIRI', footer_tagline:'Dibina untuk generasi pemikir seterusnya.',
+    waiting_eyebrow:'LOBI PERLAWANAN', btn_copy:'SALIN', btn_leave:'← Kembali ke lobi', arena_label:'PERLAWANAN BERLANGSUNG',
+    arena_heading:'Arena perlawanan', opponent_label:'LAWAN', you_label:'ANDA', mobile_chat:'💬 Sembang & langkah',
+    guide_eyebrow:'PANDUAN PANTAS', guide_heading:'Cara bermain Sentinel Chess',
+    guide_intro:'Sentinel Chess dimainkan pada papan 10×10 dengan dua bidak Sentinel tambahan.',
+    guide_rule1:'Klik bidak untuk melihat langkah sah, kemudian klik petak sasaran.',
+    guide_rule2:'Sentinel (♆) bergerak seperti bishop dan knight.',
+    guide_rule3:'Capai checkmate sebelum masa anda habis.', guide_done:'Faham', copied:'Kod bilik berjaya disalin!',
+    leave_match_confirm:'Tinggalkan perlawanan ini? Permainan akan tamat.',
+    offline:'Terputus', online:'DALAM TALIAN', connecting:'Menyambung...', opponent_left:'Lawan telah meninggalkan perlawanan.',
+    waiting_left:'Kembali ke lobi.', no_chat_ai:'Mod AI tiada sembang dalam talian.'
+  },
+  en: {
+    nav_play:'Play', nav_rooms:'Rooms', nav_guide:'How to play', hero_eyebrow:'A NEW DIMENSION OF STRATEGY',
+    hero_title_1:'The next move', hero_title_2:'is yours.',
+    hero_description:'More squares. More strategy. Experience 10×10 chess with the exclusive Sentinel piece, online matches, and AI opponents.',
+    btn_explore:'Explore rooms ↗', benefit_1:'Real-time multiplayer', benefit_2:'3 AI difficulty levels',
+    board_eyebrow:'INTRODUCING', board_title:'A bigger battlefield.', sentinel_title:'Meet the Sentinel.',
+    sentinel_description:'One unique piece with the combined movement of a bishop and a knight. One move changes everything.',
+    sentinel_footnote:'AN EXCLUSIVE 10×10 PIECE', stat_squares:'Board squares', stat_languages:'Languages', stat_moves:'Possibilities',
+    play_label:'YOUR NEXT MATCH', play_heading:'Ready to play?', play_description:'Set your player name and choose how you want to play.',
+    username_label:'PLAYER NAME', computer_heading:'PLAY THE COMPUTER', difficulty_label:'DIFFICULTY', time_label:'TIME CONTROL',
+    play_note:'No account needed to start playing.', multiplayer_label:'MULTIPLAYER', rooms_heading:'Open rooms',
+    create_heading:'CREATE YOUR OWN ROOM', footer_tagline:'Built for the next generation of thinkers.',
+    waiting_eyebrow:'MATCHMAKING LOBBY', btn_copy:'COPY', btn_leave:'← Back to lobby', arena_label:'MATCH IN PROGRESS',
+    arena_heading:'Game arena', opponent_label:'OPPONENT', you_label:'YOU', mobile_chat:'💬 Chat & moves',
+    guide_eyebrow:'QUICK GUIDE', guide_heading:'How Sentinel Chess works',
+    guide_intro:'Sentinel Chess is played on a 10×10 board. The rules are similar to standard chess, with two additional Sentinel pieces.',
+    guide_rule1:'Select a piece to see legal moves, then select its destination.',
+    guide_rule2:'The Sentinel (♆) combines the moves of a bishop and a knight.',
+    guide_rule3:'Checkmate your opponent before your clock runs out.', guide_done:'Got it', copied:'Room code copied!',
+    leave_match_confirm:'Leave this game? The match will end.',
+    offline:'Offline', online:'ONLINE', connecting:'Connecting...', opponent_left:'Your opponent left the match.',
+    waiting_left:'Back in the lobby.', no_chat_ai:'AI matches do not support online chat.'
+  },
+  zh: {
+    nav_play:'开始', nav_rooms:'房间', nav_guide:'玩法', hero_eyebrow:'战略的新维度',
+    hero_title_1:'下一步棋', hero_title_2:'由你决定。',
+    hero_description:'更多棋格，更多策略。体验拥有独特 Sentinel 棋子的 10×10 象棋，与好友在线对战或挑战 AI。',
+    btn_explore:'查看房间 ↗', benefit_1:'实时多人对战', benefit_2:'3 种 AI 难度',
+    board_eyebrow:'全新体验', board_title:'更大的棋盘。', sentinel_title:'认识 Sentinel。',
+    sentinel_description:'一种结合象与马走法的特殊棋子。一步棋就能改变战局。',
+    sentinel_footnote:'专属 10×10 棋子', stat_squares:'棋格', stat_languages:'语言', stat_moves:'无限可能',
+    play_label:'下一场对局', play_heading:'准备好了吗？', play_description:'设置玩家名称并选择游戏模式。',
+    username_label:'玩家名称', computer_heading:'挑战电脑', difficulty_label:'难度', time_label:'时间限制',
+    play_note:'无需注册即可开始。', multiplayer_label:'多人游戏', rooms_heading:'开放房间',
+    create_heading:'创建自己的房间', footer_tagline:'为下一代棋手打造。',
+    waiting_eyebrow:'匹配大厅', btn_copy:'复制', btn_leave:'← 返回大厅', arena_label:'对局进行中',
+    arena_heading:'对局竞技场', opponent_label:'对手', you_label:'你', mobile_chat:'💬 聊天与记录',
+    guide_eyebrow:'快速教程', guide_heading:'Sentinel Chess 玩法',
+    guide_intro:'Sentinel Chess 使用 10×10 棋盘，基本规则类似传统国际象棋，并增加了 Sentinel 棋子。',
+    guide_rule1:'点击棋子查看合法走法，然后选择目标格。',
+    guide_rule2:'Sentinel (♆) 同时具备象和马的走法。',
+    guide_rule3:'在时间耗尽前将死对手。', guide_done:'知道了', copied:'房间代码已复制！',
+    leave_match_confirm:'确定离开对局吗？本局将结束。',
+    offline:'已断线', online:'在线', connecting:'连接中...', opponent_left:'对手已退出对局。',
+    waiting_left:'已返回大厅。', no_chat_ai:'AI 模式不支持在线聊天。'
+  }
+};
+for (const lang of Object.keys(UI_COPY)) Object.assign(TRANSLATIONS[lang], UI_COPY[lang]);
+
 let currentLang = 'id';
 function t(key) { return TRANSLATIONS[currentLang][key] || key; }
 
@@ -105,7 +202,16 @@ function updateUILanguage() {
         const key = el.getAttribute('data-i18n-ph');
         el.placeholder = t(key);
     });
-    if(Object.keys(lastRoomList).length >= 0) renderRoomList(lastRoomList);
+    const title = document.getElementById('hero-title');
+    if (title) {
+        title.replaceChildren();
+        title.append(document.createTextNode(t('hero_title_1')));
+        title.appendChild(document.createElement('br'));
+        const em = document.createElement('em'); em.textContent = t('hero_title_2'); title.appendChild(em);
+    }
+    document.documentElement.lang = currentLang === 'zh' ? 'zh' : currentLang;
+    renderRoomList(lastRoomList);
+    if (typeof socket !== 'undefined') setConnectionStatus(socket.connected);
 }
 
 document.getElementById('lang-selector').addEventListener('change', (e) => {
@@ -152,9 +258,27 @@ let selectedSquare = null; let lastMove = null; let kingInCheck = null; let sele
 let vsAI = false; let isSpectator = false; let isWhiteTurnSpectator = true;
 let initialTimeLimit = 300; let myTime = 300; let oppTime = 300; let timerInterval = null;
 let capturedByMe = []; let capturedByOpp = []; let moveLog = []; let moveCount = 1;
-let lastRoomList = {};
+let lastRoomList = {}; let gameEnded = false; let launchToken = 0;
 
 const PIECES = { 'r': '♜', 'n': '♞', 's': '♆', 'b': '♝', 'q': '♛', 'k': '♚', 'p': '♟', 'R': '♖', 'N': '♘', 'S': '♆', 'B': '♗', 'Q': '♕', 'K': '♔', 'P': '♙' };
+// Decorative lobby preview uses the same setup as the playable chessboard.
+function buildPreviewBoard() {
+    const preview = document.getElementById('preview-board');
+    if (!preview) return;
+    const fragment = document.createDocumentFragment();
+    INITIAL_BOARD.forEach((row, r) => row.forEach((piece, c) => {
+        const square = document.createElement('div');
+        square.className = `preview-square ${(r + c) % 2 === 0 ? 'light' : 'dark'}`;
+        if (piece) {
+            const symbol = document.createElement('span');
+            symbol.className = `preview-piece ${getColor(piece)} ${piece.toLowerCase() === 's' ? 'sentinel' : ''}`;
+            symbol.textContent = PIECES[piece]; square.appendChild(symbol);
+        }
+        fragment.appendChild(square);
+    }));
+    preview.replaceChildren(fragment);
+}
+
 const PIECE_VALUES = { 'p': 10, 'n': 30, 'b': 30, 'r': 50, 's': 70, 'q': 90, 'k': 900 };
 const INITIAL_BOARD = [
     ['r', 'n', 's', 'b', 'q', 'k', 'b', 's', 'n', 'r'], ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
@@ -172,41 +296,43 @@ const showScreen = (screenName) => {
 
 // --- MULTIPLAYER LOBBY LOGIC ---
 function renderRoomList(rooms) {
-    lastRoomList = rooms;
-    roomListContainer.innerHTML = '';
-    const roomKeys = Object.keys(rooms);
-    if (roomKeys.length === 0) {
-        roomListContainer.innerHTML = `<p class="small-text">${t('no_room')}</p>`;
+    lastRoomList = rooms || {};
+    roomListContainer.replaceChildren();
+    const roomKeys = Object.keys(lastRoomList);
+    const count = document.getElementById('room-count');
+    if (count) count.textContent = String(roomKeys.length);
+    if (!roomKeys.length) {
+        const empty = document.createElement('div');
+        empty.className = 'empty-rooms';
+        const icon = document.createElement('span'); icon.className = 'empty-icon'; icon.textContent = '♟';
+        const msg = document.createElement('span'); msg.textContent = t('no_room');
+        empty.append(icon, msg); roomListContainer.appendChild(empty);
         return;
     }
     roomKeys.forEach(code => {
-        const roomData = rooms[code];
-        const item = document.createElement('div');
-        item.className = 'room-item';
-        
+        const roomData = lastRoomList[code];
+        const item = document.createElement('div'); item.className = 'room-item';
         const isFull = roomData.playerCount >= 2;
-        const label = document.createElement('span');
-        label.textContent = `${code} (${roomData.playerCount}/2) ${roomData.hasPassword ? '🔒' : '🌐'} | ⏱️ ${roomData.timer/60}m`;
-        
+        const details = document.createElement('div'); details.className = 'room-item-info';
+        const title = document.createElement('strong'); title.textContent = code;
+        const subtitle = document.createElement('small');
+        subtitle.textContent = `${roomData.hasPassword ? '🔒' : '🌐'}  ${roomData.playerCount}/2  ·  ⏱ ${Math.round((roomData.timer || 300) / 60)} min`;
+        details.append(title, subtitle);
         const joinBtn = document.createElement('button');
-        joinBtn.className = isFull ? 'btn warning' : 'btn primary';
+        joinBtn.type = 'button'; joinBtn.className = isFull ? 'btn ghost' : 'btn outline';
         joinBtn.textContent = isFull ? t('btn_watch') : t('btn_join');
-        
         joinBtn.addEventListener('click', () => {
             vsAI = false;
             const username = usernameInput.value.trim() || 'Player';
             if (roomData.hasPassword) {
                 selectedRoomToJoin = code;
-                targetRoomLabel.textContent = `Room "${code}" ${t('pass_req')}`;
+                targetRoomLabel.textContent = `"${code}" — ${t('pass_req')}`;
                 manualJoinPassInput.value = '';
                 passwordModal.classList.remove('hidden');
-            } else {
-                socket.emit('joinRoomManual', { username, roomName: code, password: '' });
-            }
+                manualJoinPassInput.focus();
+            } else socket.emit('joinRoomManual', { username, roomName: code, password: '' });
         });
-        item.appendChild(label);
-        item.appendChild(joinBtn);
-        roomListContainer.appendChild(item);
+        item.append(details, joinBtn); roomListContainer.appendChild(item);
     });
 }
 
@@ -239,7 +365,9 @@ document.getElementById('btn-create').addEventListener('click', () => {
 
 document.getElementById('btn-vs-ai').addEventListener('click', () => {
     const user = usernameInput.value.trim() || 'Player';
-    vsAI = true; isSpectator = false; myColor = 'white'; myTurn = true;
+    vsAI = true; isSpectator = false; myColor = 'white'; myTurn = true; gameEnded = false;
+    roomCode = 'AI MATCH';
+    boardElement.classList.remove('flipped');
     boardState = JSON.parse(JSON.stringify(INITIAL_BOARD));
     
     initialTimeLimit = parseInt(createRoomTimerInput.value);
@@ -248,14 +376,15 @@ document.getElementById('btn-vs-ai').addEventListener('click', () => {
     resetSidePanels();
     
     document.getElementById('my-name').textContent = user;
-    const levelName = aiLevelSelect ? aiLevelSelect.options[aiLevelSelect.selectedIndex].text : 'NORMAL';
-    document.getElementById('opp-name').textContent = `Bot 🤖 (${levelName.split(' ')[2]})`;
+    const levelName = { '1': 'EASY', '2': 'NORMAL', '3': 'HARD' }[aiLevelSelect?.value] || 'NORMAL';
+    document.getElementById('opp-name').textContent = `Bot 🤖 (${levelName})`;
     document.getElementById('btn-resign').style.display = 'block';
     document.getElementById('btn-draw').style.display = 'block';
 
-    updateCapturedUI(); updateTurnUI(); renderBoard(); startTimer();
+    setGameRoomLabel(); updateCapturedUI(); updateTurnUI(); renderBoard(); updateTimerUI(); startTimer();
     glitchOverlay.classList.remove('hidden');
-    setTimeout(() => { glitchOverlay.classList.add('hidden'); showScreen('game'); }, 1800);
+    const token = ++launchToken;
+    setTimeout(() => { if (token !== launchToken) return; glitchOverlay.classList.add('hidden'); showScreen('game'); }, 1800);
 });
 
 socket.on('roomCreated', (data) => {
@@ -274,13 +403,17 @@ chatInput.addEventListener('keypress', function (e) {
             if (vsAI) {
                 appendChat(username, msg, false);
                 chatInput.value = '';
-                setTimeout(() => { appendChat("Bot 🤖", "...", false); }, 1000);
+                showToast(t('no_chat_ai'));
                 return;
             }
             socket.emit('sendChat', { roomCode, username, msg, isSpectator });
             chatInput.value = '';
         }
     }
+});
+
+document.getElementById('btn-send-chat').addEventListener('click', () => {
+    chatInput.dispatchEvent(new KeyboardEvent('keypress', { key: 'Enter', bubbles: true }));
 });
 
 socket.on('receiveChat', (data) => { 
@@ -295,7 +428,9 @@ socket.on('receiveChat', (data) => {
 function appendChat(username, msg, spec) {
     const div = document.createElement('div');
     div.className = 'chat-msg';
-    div.innerHTML = `<span class="${spec ? 'spec' : 'sender'}">[${username}]</span> ${msg}`;
+    const sender = document.createElement('span');
+    sender.className = spec ? 'spec' : 'sender'; sender.textContent = `[${username}] `;
+    div.append(sender, document.createTextNode(msg));
     chatMessagesContainer.appendChild(div);
     chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
 }
@@ -356,30 +491,33 @@ socket.on('requestSync', (targetId) => {
 });
 
 socket.on('syncGame', (data) => {
-    isSpectator = true; boardState = data.boardState; lastMove = data.lastMove;
+    isSpectator = true; gameEnded = false; roomCode = data.roomCode || roomCode; boardState = data.boardState; lastMove = data.lastMove;
     myColor = 'white'; myTurn = false;
     document.getElementById('my-name').textContent = data.players.white;
     document.getElementById('opp-name').textContent = data.players.black;
-    myTime = data.whiteTime; oppTime = data.blackTime;
+    myTime = data.whiteTime; oppTime = data.blackTime; initialTimeLimit = data.timeLimit || 300;
     capturedByMe = data.capturedByWhite; capturedByOpp = data.capturedByBlack;
     isWhiteTurnSpectator = data.isWhiteTurn;
     
     resetSidePanels();
-    moveLog = data.moveLog || []; moveCount = data.moveCount || 1;
+    moveLog = data.moveLog || []; moveCount = 1;
     moveLog.forEach(log => { appendMoveToHistory(log.notation, log.isWhite); });
+    moveCount = data.moveCount || moveCount;
 
     document.getElementById('btn-resign').style.display = 'none';
     document.getElementById('btn-draw').style.display = 'none';
     document.getElementById('my-status').textContent = t('spectating');
-    document.getElementById('my-status').style.opacity = '1';
+    document.getElementById('my-status').classList.add('active');
+    boardElement.classList.remove('flipped');
 
-    updateCapturedUI(); renderBoard(); startTimer();
+    setGameRoomLabel(); updateCapturedUI(); renderBoard(); updateTimerUI(); startTimer();
     glitchOverlay.classList.remove('hidden');
-    setTimeout(() => { glitchOverlay.classList.add('hidden'); showScreen('game'); }, 1000);
+    const token = ++launchToken;
+    setTimeout(() => { if (token !== launchToken) return; glitchOverlay.classList.add('hidden'); showScreen('game'); }, 1000);
 });
 
 socket.on('startGame', (players) => {
-    vsAI = false; isSpectator = false;
+    vsAI = false; isSpectator = false; gameEnded = false;
     boardState = JSON.parse(JSON.stringify(INITIAL_BOARD));
     myTurn = myColor === 'white';
     initialTimeLimit = players.timeLimit || 300;
@@ -395,17 +533,19 @@ socket.on('startGame', (players) => {
     if(myColor === 'black') document.getElementById('board').classList.add('flipped');
     else document.getElementById('board').classList.remove('flipped');
     
-    updateCapturedUI(); updateTurnUI(); renderBoard(); startTimer();
+    setGameRoomLabel(); updateCapturedUI(); updateTurnUI(); renderBoard(); updateTimerUI(); startTimer();
     glitchOverlay.classList.remove('hidden');
-    setTimeout(() => { glitchOverlay.classList.add('hidden'); showScreen('game'); }, 1800);
+    const token = ++launchToken;
+    setTimeout(() => { if (token !== launchToken) return; glitchOverlay.classList.add('hidden'); showScreen('game'); }, 1800);
 });
 
 socket.on('errorMsg', (msg) => { errorMsg.textContent = msg; });
 
-socket.on('opponentMove', ({ from, to, promotedPiece, isCapture, capturedPiece, notation }) => {
+socket.on('opponentMove', ({ from, to, promotedPiece, isCapture, capturedPiece, notation, moverColor }) => {
+    if (gameEnded || !boardState.length) return;
     if (capturedPiece) {
         if (isSpectator) {
-            if (isWhiteTurnSpectator) capturedByMe.push(capturedPiece);
+            if (moverColor === 'white') capturedByMe.push(capturedPiece);
             else capturedByOpp.push(capturedPiece);
         } else {
             capturedByOpp.push(capturedPiece);
@@ -415,7 +555,7 @@ socket.on('opponentMove', ({ from, to, promotedPiece, isCapture, capturedPiece, 
     executeMoveOnBoard(boardState, from.r, from.c, to.r, to.c, promotedPiece);
     lastMove = { from, to, isCapture };
     
-    let isWhiteNow = isSpectator ? isWhiteTurnSpectator : false;
+    let isWhiteNow = isSpectator ? moverColor === 'white' : myColor === 'black';
     moveLog.push({notation, isWhite: isWhiteNow});
     appendMoveToHistory(notation, isWhiteNow);
 
@@ -433,10 +573,11 @@ socket.on('gameOverTimeOut', (loserColor) => {
 
 // --- AI LOGIC ---
 function makeAIMove() {
-    if (vsAI && !myTurn && !isSpectator) {
+    if (vsAI && !gameEnded && !myTurn && !isSpectator) {
         document.getElementById('opp-status').textContent = t('bot_thinking');
         const aiLevel = aiLevelSelect ? parseInt(aiLevelSelect.value) : 2;
         setTimeout(() => {
+            if (gameEnded || !vsAI) return;
             let allMoves = [];
             for (let r = 0; r < 10; r++) {
                 for (let c = 0; c < 10; c++) {
@@ -534,6 +675,8 @@ function startTimer() {
 function updateTimerUI() {
     document.getElementById('my-timer').textContent = formatTime(myTime);
     document.getElementById('opp-timer').textContent = formatTime(oppTime);
+    document.getElementById('my-timer').classList.toggle('low-time', myTime <= 30);
+    document.getElementById('opp-timer').classList.toggle('low-time', oppTime <= 30);
 }
 function formatTime(seconds) { return `${Math.floor(seconds / 60).toString().padStart(2, '0')}:${(seconds % 60).toString().padStart(2, '0')}`; }
 function updateCapturedUI() {
@@ -632,7 +775,7 @@ const postMoveChecks = () => {
 function renderBoard() {
     boardElement.innerHTML = '';
     let legalMovesForSelected = [];
-    if (selectedSquare && !isSpectator) legalMovesForSelected = getLegalMoves(boardState, selectedSquare.r, selectedSquare.c);
+    if (selectedSquare && !isSpectator && !gameEnded) legalMovesForSelected = getLegalMoves(boardState, selectedSquare.r, selectedSquare.c);
 
     for (let r = 0; r < 10; r++) {
         for (let c = 0; c < 10; c++) {
@@ -644,7 +787,7 @@ function renderBoard() {
             const piece = boardState[r][c];
             if (piece) {
                 const span = document.createElement('span');
-                span.className = 'piece'; span.textContent = PIECES[piece];
+                span.className = `piece ${getColor(piece)}-piece`; span.textContent = PIECES[piece];
                 if (lastMove && lastMove.to.r === r && lastMove.to.c === c) span.classList.add('piece-moved');
                 if (piece.toLowerCase() === 's') span.classList.add(piece === 'S' ? 'white-sentinel' : 'black-sentinel');
                 square.appendChild(span);
@@ -660,14 +803,16 @@ function renderBoard() {
                 if (piece) square.classList.add('capture-hint');
             }
 
-            if (!isSpectator) square.addEventListener('click', () => onSquareClick(r, c, isLegal));
+            if (!isSpectator) { square.tabIndex = 0; square.setAttribute('role', 'gridcell');
+                square.addEventListener('click', () => onSquareClick(r, c, isLegal));
+                square.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSquareClick(r, c, isLegal); } }); }
             boardElement.appendChild(square);
         }
     }
 }
 
 function onSquareClick(r, c, isLegalMove) {
-    if (!myTurn || isSpectator) return;
+    if (!myTurn || isSpectator || gameEnded) return;
     const clickedPiece = boardState[r][c];
     
     if (selectedSquare) {
@@ -717,14 +862,17 @@ function onSquareClick(r, c, isLegalMove) {
 
 function updateTurnUI() {
     if (isSpectator) return;
-    document.getElementById('my-status').style.opacity = myTurn ? '1' : '0';
-    document.getElementById('opp-status').style.opacity = !myTurn ? '1' : '0';
+    document.getElementById('my-status').classList.toggle('active', myTurn);
+    document.getElementById('opp-status').classList.toggle('active', !myTurn);
+    document.getElementById('my-player-card').classList.toggle('current-player', myTurn);
+    document.getElementById('opponent-player-card').classList.toggle('current-player', !myTurn);
     document.getElementById('my-status').textContent = t('your_turn');
     document.getElementById('opp-status').textContent = t('opp_turn');
 }
 
 function endGame(msg) {
-    myTurn = false;
+    if (gameEnded) return;
+    gameEnded = true; myTurn = false;
     if (timerInterval) clearInterval(timerInterval);
     document.getElementById('modal-title').textContent = t('go_title');
     document.getElementById('modal-desc').textContent = msg;
@@ -756,5 +904,97 @@ socket.on('drawOffered', () => {
 });
 socket.on('gameDrawn', () => endGame(t('draw_game')));
 
-// Inisialisasi awal bahasa
+// Website interactions and quality-of-life enhancements.
+let toastTimer;
+function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2700);
+}
+function setGameRoomLabel() {
+    document.getElementById('game-room-label').textContent = roomCode === 'AI MATCH' ? 'AI MATCH' : (roomCode || 'LIVE MATCH');
+}
+function leaveActiveMatch() {
+    if (screens.game.classList.contains('active') && !gameEnded && !confirm(t('leave_match_confirm'))) return false;
+    if (screens.game.classList.contains('active') || screens.waiting.classList.contains('active')) {
+        ++launchToken;
+        if (!vsAI) socket.emit('leaveRoom');
+        if (timerInterval) clearInterval(timerInterval);
+        gameEnded = true; roomCode = '';
+        glitchOverlay.classList.add('hidden');
+        modal.classList.add('hidden');
+    }
+    return true;
+}
+function openRooms() {
+    if (!leaveActiveMatch()) return;
+    showScreen('lobby');
+    document.getElementById('rooms-panel').scrollIntoView({ behavior:'smooth', block:'center' });
+}
+document.getElementById('btn-go-rooms').addEventListener('click', openRooms);
+document.getElementById('nav-rooms').addEventListener('click', openRooms);
+document.getElementById('nav-play').addEventListener('click', () => {
+    if (!leaveActiveMatch()) return;
+    showScreen('lobby');
+    document.getElementById('play-panel').scrollIntoView({ behavior:'smooth', block:'center' });
+});
+document.getElementById('nav-guide').addEventListener('click', () => document.getElementById('guide-modal').classList.remove('hidden'));
+function closeGuide() { document.getElementById('guide-modal').classList.add('hidden'); }
+document.getElementById('btn-guide-close').addEventListener('click', closeGuide);
+document.getElementById('btn-guide-done').addEventListener('click', closeGuide);
+document.getElementById('guide-modal').addEventListener('click', e => { if (e.target.id === 'guide-modal') closeGuide(); });
+document.getElementById('btn-copy-room').addEventListener('click', async () => {
+    const code = document.getElementById('display-room-code').textContent;
+    try {
+        await navigator.clipboard.writeText(code);
+        showToast(t('copied'));
+    } catch (_) {
+        const textArea = document.createElement('textarea');
+        textArea.value = code; document.body.appendChild(textArea);
+        textArea.select(); document.execCommand('copy'); textArea.remove();
+        showToast(t('copied'));
+    }
+});
+document.getElementById('btn-leave-wait').addEventListener('click', () => {
+    ++launchToken; socket.emit('leaveRoom');
+    glitchOverlay.classList.add('hidden');
+    roomCode = ''; showScreen('lobby'); showToast(t('waiting_left'));
+});
+document.getElementById('btn-back').addEventListener('click', () => {
+    if (!vsAI) socket.emit('leaveRoom');
+    location.reload();
+});
+manualJoinPassInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('btn-submit-pass').click();
+});
+window.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    if (!passwordModal.classList.contains('hidden')) passwordModal.classList.add('hidden');
+    if (!document.getElementById('guide-modal').classList.contains('hidden')) closeGuide();
+    sidePanel.classList.remove('open');
+});
+socket.on('opponentDisconnected', () => {
+    if (screens.game.classList.contains('active')) endGame(t('opponent_left'));
+    else if (screens.waiting.classList.contains('active')) { showScreen('lobby'); showToast(t('opponent_left')); }
+});
+function setConnectionStatus(connected) {
+    document.getElementById('connection-status').classList.toggle('offline', !connected);
+    document.getElementById('connection-label').textContent = t(connected ? 'online' : 'offline');
+}
+socket.on('connect', () => setConnectionStatus(true));
+socket.on('disconnect', () => {
+    setConnectionStatus(false);
+    if (screens.game.classList.contains('active') && !vsAI) endGame(t('offline'));
+});
+setConnectionStatus(socket.connected);
+try {
+    const savedName = localStorage.getItem('sentinel-player-name');
+    if (savedName) usernameInput.value = savedName.slice(0, 12);
+} catch (_) { /* Private / restricted browser contexts may disable storage. */ }
+usernameInput.addEventListener('input', () => {
+    try { localStorage.setItem('sentinel-player-name', usernameInput.value); } catch (_) {}
+});
+buildPreviewBoard();
 updateUILanguage();
